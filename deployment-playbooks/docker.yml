@@ -1,0 +1,98 @@
+---
+- name: Installing python
+  remote_user: root
+  gather_facts: no
+  hosts: docker
+  tasks:
+  - name: 'Install python2'
+    raw: sudo apt-get -y install python-simplejson
+
+- name: Installing docker
+  remote_user: root
+  hosts: docker
+  tasks:
+    - name: Upgrade all packages to the latest version
+      apt:
+        upgrade: yes
+        update_cache: yes
+
+    - name: Ensure packages are installed
+      apt: name={{item}}
+      with_items:
+          - python-pip
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+
+    - name: Add Docker’s official GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Set up the stable repository
+      shell: sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+    - name: Install the latest version of Docker CE
+      apt:
+        name: docker-ce
+        update_cache: yes
+
+    - name: Install docker python interface
+      pip: name={{item}}
+      with_items:
+        - docker
+        - docker-compose
+
+- name: Add a hacker user
+  hosts: docker
+  remote_user: root
+  gather_facts: no
+  vars:
+    password: $6$uLrT6fIsmZbln7$WBzHa.8XgNCudOIhdq0AgkHmu9Yb3uFEerIyiNOnLSeA8T5IuTtnh8F4kSq9RKV4rUAk25t6.S4YG7fxOpFb8.
+  tasks:
+    - user: name=hacker password={{password}} groups=sudo,docker shell=/bin/bash
+
+    - name: Create .ssh folder for web user
+      file:
+        path: /home/web/.ssh
+        state: directory
+        owner: hacker
+        group: hacker
+
+    - name: Copy authorized keys from root user to web
+      command: cp /root/.ssh/authorized_keys /home/web/.ssh/authorized_keys
+
+    - name: Change authorized keys permissions
+      file:
+        path: /home/web/.ssh/authorized_keys
+        owner: hacker
+        group: hacker
+
+- name: Setting up POA network
+  hosts: docker
+  remote_user: root
+  become: yes
+  become_method: su
+  become_user: hacker
+  gather_facts: no
+  tasks:
+    - git:
+        repo: "https://github.com/chebykin/parity-poa-playground.git"
+        dest: "~/parity-poa-playground"
+
+    - docker_service:
+        project_name: poa
+        project_src: "~/parity-poa-playground"
+        state: present
+      register: output
+
+    - name: Wait for port 8180 to become open on the host
+      wait_for:
+        host: 0.0.0.0
+        port: 8180
+
+    - name: Wait for port 3001 to become open on the host
+      wait_for:
+        host: 0.0.0.0
+        port: 3001

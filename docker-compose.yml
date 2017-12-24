@@ -1,4 +1,5 @@
-version: '2.1'
+version: '3'
+
 services:
   authority0:
     image: parity/parity:${PARITY_VERSION}
@@ -106,6 +107,7 @@ volumes:
   authority0:
   authority1:
   authority2:
+
 networks:
   app_net:
     driver: bridge
@@ -113,4 +115,3 @@ networks:
       driver: default
       config:
       - subnet: 172.16.0.1/24
-        gateway: 172.16.0.1
