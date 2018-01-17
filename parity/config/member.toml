@@ -5,14 +5,11 @@ chain = "/parity/config/chain.json"
 interface = "0.0.0.0"
 cors = "all"
 hosts = ["all"]
-origins = ["all"]
 apis = ["web3", "eth", "net", "parity", "traces", "rpc", "personal", "parity_accounts", "signer", "parity_set"]
 
 [websockets]
 interface = "0.0.0.0"
-cors = "all"
 hosts = ["all"]
-origins = ["all"]
 apis = ["web3", "eth", "net", "parity", "traces", "rpc", "personal", "parity_accounts", "signer", "parity_set"]
 
 [network]
