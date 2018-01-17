@@ -51,7 +51,7 @@ services:
 
   member0:
     image: parity/parity:${PARITY_VERSION}
-    command: --config /parity/config/member.toml
+    command: --config /parity/config/member.toml ui
     volumes:
       - ./parity/config:/parity/config:ro
       - ./parity/keys:/root/.local/share/io.parity.ethereum/keys/${NETWORK_NAME}
