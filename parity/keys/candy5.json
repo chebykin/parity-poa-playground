@@ -1,0 +1,22 @@
+{
+  "version": 3,
+  "id": "c1d50726-46aa-4476-a70d-6096b1e0bf4f",
+  "address": "0d1d4e623d10f9fba5db95830f7d3839406c6af2",
+  "crypto": {
+    "ciphertext": "37a8f7ccf05b45942859e0645fba94f562d31a634c08a9b5367f070f4f5673d9",
+    "cipherparams": {
+      "iv": "bc346f49242c34d0ec485465465c165c"
+    },
+    "cipher": "aes-128-ctr",
+    "kdf": "scrypt",
+    "kdfparams": {
+      "dklen": 32,
+      "salt": "121d32e98ff0aca31bbd997f5241cdc77c05c5b33508585688a674750dbcf8c6",
+      "n": 262144,
+      "r": 8,
+      "p": 1
+    },
+    "mac": "f585a960ce8f82b651baec9f400ea28ca1e33afee9b87bf3f3f0b2d1b477aa0d"
+  },
+  "name": "candy5"
+}

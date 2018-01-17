@@ -3,4 +3,5 @@
 
 # keys to keep
 !/master*.json
+!/candy*.json
 !/slave.json
